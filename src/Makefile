@@ -1,36 +1,40 @@
+NAME := get_next_line.a
 CC := clang
 AR := ar
 CFLAGS := -Wall -Wextra -Werror
-TMPS := $(OTHER_USEFUL_FILES)
 
 TMP_DIR := tmp
 
-all: $(NAME) $(OTHER_USEFUL_FILES)
-bonus: all
+BUFFER_SIZE ?= 42
+CFLAGS += -DBUFFER_SIZE=$(BUFFER_SIZE)
+SUFFIX := .$(BUFFER_SIZE)$(if $(SANITIZER),.$(SANITIZER))
+
+NAME_BASIC := basic$(SUFFIX).a
+NAME_BONUS := bonus$(SUFFIX).a
+
+SRCS_BASIC := ./get_next_line.c ./get_next_line_utils.c
+SRCS_BONUS := $(SRCS_BASIC:.c=_bonus.c)
+
+$(NAME): all
+all: $(TMP_DIR)/$(NAME_BASIC)
+	cp $< $(NAME)
+bonus: $(TMP_DIR)/$(NAME_BONUS)
+	cp $< $(NAME)
 clean:
-	rm -rf $(OTHER_USEFUL_FILES) tmp
+	rm -rf $(TMP_DIR)
 fclean: clean
 	rm -f $(NAME)
 re:
 	$(MAKE) fclean
 	$(MAKE) all
-.PHONY: all bonus clean fclean re
-
-BUFFER_SIZE ?= 42
-CFLAGS += -D
-
-SUFFIX := .$(TARGET).$(PROFILE)$(if $(SANITIZER),.$(SANITIZER))
+.PHONY: all bonus clean fclean re $(NAME)
 
 $(TMP_DIR)/%.a:
-	$Qmkdir -p $(@D)
-	$Q$(AR) rcs $@ $^
+	mkdir -p $(@D)
+	$(AR) rcs $@ $^
 $(TMP_DIR)/%$(SUFFIX).o: %.c
-	$Qmkdir -p $(@D)
-	$Q$(CC) $(CFLAGS) -c $< -o $@ -MMD $(if $(SANITIZER),-fsanitize=$(SANITIZER),)
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) -c $< -o $@ $(if $(SANITIZER),-fsanitize=$(SANITIZER),)
 
-$(TMP_DIR)/ft_printf$(SUFFIX).a: $(patsubst ./%.c,$(TMP_DIR)/%$(SUFFIX).o,$(SRCS))
-.PHONY: $(NAME)
-$(NAME): $(TMP_DIR)/ft_printf$(SUFFIX).a
-	$Qcp $< $@
-
--include $(TMP_DIR)/$(SRCS:.c=$(SUFFIX).d)
+$(TMP_DIR)/$(NAME_BASIC): $(patsubst ./%.c,$(TMP_DIR)/%$(SUFFIX).o,$(SRCS_BASIC))
+$(TMP_DIR)/$(NAME_BONUS): $(patsubst ./%.c,$(TMP_DIR)/%$(SUFFIX).o,$(SRCS_BONUS))
