@@ -6,7 +6,7 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 03:00:27 by jmaing            #+#    #+#             */
-/*   Updated: 2022/04/28 09:09:48 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/04/28 09:37:15 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_lstring	*tr_p(void ***c, unsigned int k, int d)
 {
 	t_lstring	*result;
 	size_t		i;
-	bool		need_free;
+	bool		not_need_free;
 
 	d++;
 	if (c && d == sizeof(int))
@@ -74,11 +74,11 @@ t_lstring	*tr_p(void ***c, unsigned int k, int d)
 		result = tr_p((t_v3)(&(*c)[k % (1 << CHAR_BIT)]), k >> CHAR_BIT, d);
 	else
 		result = NULL;
-	need_free = false;
+	not_need_free = false;
 	i = -1;
-	while (++i < (1 << CHAR_BIT) && !need_free)
-		need_free = (c && (*c) && !!(*c)[i]);
-	if (need_free)
+	while (++i < (1 << CHAR_BIT) && !not_need_free)
+		not_need_free = (c && (*c) && !!(*c)[i]);
+	if (!not_need_free)
 		*c = (free(*c), NULL);
 	return (result);
 }
