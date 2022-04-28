@@ -6,9 +6,11 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:52:18 by jmaing            #+#    #+#             */
-/*   Updated: 2022/04/28 13:27:23 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/04/28 13:42:58 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "test.h"
 
 #include "get_next_line_bonus.h"
 
@@ -16,6 +18,40 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <dlfcn.h>
+
+//
+
+static int	g_alloc = 0;
+
+void	*malloc(size_t size)
+{
+	static void	*(*real)(size_t);
+	void		*result;
+
+	if (!real)
+		real = dlsym(RTLD_NEXT, "malloc");
+	result = real(size);
+	fprintf(stderr, "malloc(%zd) called", size);
+	if (!result)
+		puts(" but failed");
+	else
+		printf(" (allocated %d chunks)\n", ++g_alloc);
+	return (result);
+}
+
+void	free(void *ptr)
+{
+	static void	(*real)(void *);
+
+	if (!real)
+		real = dlsym(RTLD_NEXT, "free");
+	if (ptr)
+		fprintf(stderr, "free() called (allocated %d chunks)\n", --g_alloc);
+	return (real(ptr));
+}
+
+//*/
 
 int	main(void)
 {
