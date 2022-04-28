@@ -6,7 +6,7 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 03:00:27 by jmaing            #+#    #+#             */
-/*   Updated: 2022/04/28 10:20:38 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/04/28 13:13:01 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,11 @@ bool	tr_a(void ***c, unsigned int k, int d, t_lstring *s)
 	t_lstring	*tmp;
 	size_t		i;
 
-	d++;
 	if (c && !*c)
 		*c = ft_calloc(1 << CHAR_BIT, sizeof(void *));
 	if (!c || !*c)
 		return (true);
-	if (d != sizeof(int))
+	if (++d != sizeof(int))
 		return (tr_a((t_v3)(&(*c)[k % (1 << CHAR_BIT)]), k >> CHAR_BIT, d, s));
 	if (!s || !(*c)[k])
 		return ((!s && (free((*c)[k]), true)) || (((*c)[k] = s), !s));
@@ -50,6 +49,7 @@ bool	tr_a(void ***c, unsigned int k, int d, t_lstring *s)
 		i = -1;
 		while (++i < ((t_lstring *)(*c)[k])->len)
 			tmp->extra[i] = ((t_lstring *)(*c)[k])->extra[i];
+		i--;
 		while (++i < ((t_lstring *)(*c)[k])->len + s->len)
 			tmp->extra[i] = s->extra[i - ((t_lstring *)(*c)[k])->len];
 	}
@@ -107,6 +107,7 @@ bool	lstrsplit(t_lstring *self, t_lstring **o_a, t_lstring **o_b, size_t p)
 	i = -1;
 	while (++i < p)
 		a->extra[i] = self->extra[i];
+	i--;
 	while (++i < self->len)
 		b->extra[i - p] = self->extra[i];
 	*o_a = a;

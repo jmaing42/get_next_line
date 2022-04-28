@@ -6,15 +6,16 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/04/28 11:43:05 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/04/28 13:24:10 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
 #include <unistd.h>
+#include <stdlib.h>
 
-static char	*read_lstring(int fd)
+static t_lstring	*read_lstring(int fd)
 {
 	t_lstring *const	result = malloc(sizeof(t_lstring) + BUFFER_SIZE);
 	ssize_t				length;
@@ -28,7 +29,7 @@ static char	*read_lstring(int fd)
 	return (result);
 }
 
-static t_lstring	*concat(const t_lstring *a, const t_lstring *b)
+static t_lstring	*concat(t_lstring *a, t_lstring *b)
 {
 	t_lstring	*result;
 	size_t		i;
@@ -42,6 +43,7 @@ static t_lstring	*concat(const t_lstring *a, const t_lstring *b)
 		i = -1;
 		while (++i < a->len)
 			result->extra[i] = a->extra[i];
+		i--;
 		while (++i < result->len)
 			result->extra[i] = b->extra[i - a->len];
 	}
@@ -54,9 +56,11 @@ static char	*lstrtocstr(const t_lstring *from)
 	size_t		i;
 
 	i = -1;
-	if (result)
-		while (++i <= from->len)
-			result[i] = from->extra[i];
+	if (!result)
+		return (NULL);
+	while (++i < from->len)
+		result[i] = from->extra[i];
+	result[i] = '\0';
 	return (result);
 }
 
@@ -70,6 +74,10 @@ char	*get_next_line(int fd)
 	while (!current || lstrlen_until(current, '\n') == current->len)
 	{
 		buffer = read_lstring(fd);
+		if (buffer && buffer->len == 0 && current)
+			return (free(buffer), lstrtocstr(current));
+		if (buffer && buffer->len == 0)
+			return (free(buffer), NULL);
 		if (!current)
 			current = buffer;
 		else
@@ -77,7 +85,7 @@ char	*get_next_line(int fd)
 		if (!current)
 			return (free(current), NULL);
 	}
-	if (lstrsplit(current, &current, &buffer, lstrlen_until(current, '\n')))
+	if (lstrsplit(current, &current, &buffer, lstrlen_until(current, '\n') + 1))
 		return (NULL);
 	if (tr_a(&map, *((unsigned int *)&fd), 0, buffer))
 		return (free(current), NULL);
