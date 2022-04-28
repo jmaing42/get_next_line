@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/04/28 13:48:52 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/04/28 14:05:37 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -57,6 +57,8 @@ static char	*lstrtocstr(t_lstring *from)
 
 	if (!from)
 		return (NULL);
+	if (!from->len)
+		return (free(from), NULL);
 	result = malloc(from->len + 1);
 	i = -1;
 	if (!result)
