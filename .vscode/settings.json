@@ -1,0 +1,25 @@
+{
+  "files.exclude": {
+    ".vscode": true,
+    "**/*.{o,d,bc,i,s,exe,a,lib,so,dll,dylib}": true,
+  },
+  "files.associations": {
+    "*.h": "c",
+    "__locale": "c",
+    "__string": "c",
+    "string": "c",
+    "string_view": "c",
+    "iterator": "c"
+  },
+  "C_Cpp.default.includePath": [
+    "${workspaceFolder}/src"
+  ],
+  "c-cpp-flylint.includePaths": [
+    "${workspaceFolder}/src"
+  ],
+  "C_Cpp.default.cStandard": "c99",
+  "c-cpp-flylint.standard": [
+    "c99",
+    "c++98"
+  ],
+}
