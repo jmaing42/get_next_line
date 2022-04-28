@@ -30,9 +30,8 @@ ifndef GIT_REMOTE_URL
 	$(error GIT_REMOTE_URL is undefined)
 endif
 	$Qrm -rf tmp
-	$Qcp -r ./src ./tmp
-	$Q$(MAKE) -C tmp fclean
-	$Qprintf "# script-generated file list\nSRCS := %s\n\n" "$$(cd src && find . -name "*.c" | xargs)" | cat - src/Makefile > tmp/Makefile
+	$Qmkdir tmp
+	$Qcp ./src/get_next_line.h ./src/get_next_line.c ./src/get_next_line_utils.c ./src/get_next_line_bonus.h ./src/get_next_line_bonus.c ./src/get_next_line_utils_bonus.c ./tmp
 	$Q(cd tmp && git init && git add . && git commit -m "Initial commit" && git push "$(GIT_REMOTE_URL)" HEAD:master) || (echo "Failed to publish" && false)
 	$Qrm -rf tmp
 	$Qgit push "$(GIT_REMOTE_URL)" HEAD:source || echo "Failed to push HEAD to source"
