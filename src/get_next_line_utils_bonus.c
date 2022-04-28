@@ -6,7 +6,7 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 03:00:27 by jmaing            #+#    #+#             */
-/*   Updated: 2022/04/28 09:37:15 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/04/28 10:20:38 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,35 @@ t_lstring	*tr_p(void ***c, unsigned int k, int d)
 	if (!not_need_free)
 		*c = (free(*c), NULL);
 	return (result);
+}
+
+size_t	lstrlen_until(t_lstring *self, char delimiter)
+{
+	size_t	i;
+
+	i = -1;
+	while (++i < self->len)
+		if (self->extra[i] == delimiter)
+			break ;
+	return (i);
+}
+
+bool	lstrsplit(t_lstring *self, t_lstring **o_a, t_lstring **o_b, size_t p)
+{
+	t_lstring *const	a = malloc(sizeof(t_lstring) + p);
+	t_lstring *const	b = malloc(sizeof(t_lstring) + self->len - p);
+	size_t				i;
+
+	if (!a || !b)
+		return (free(self), free(o_a), free(o_b), true);
+	a->len = p;
+	b->len = self->len - p;
+	i = -1;
+	while (++i < p)
+		a->extra[i] = self->extra[i];
+	while (++i < self->len)
+		b->extra[i - p] = self->extra[i];
+	*o_a = a;
+	*o_b = b;
+	return (false);
 }
