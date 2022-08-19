@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:52:18 by jmaing            #+#    #+#             */
-/*   Updated: 2022/04/28 13:59:46 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/08/20 00:08:31 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "test.h"
-
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
 #include <stdbool.h>
 #include <stdlib.h>

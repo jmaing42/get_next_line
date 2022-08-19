@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 21:36:47 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/19 01:58:44 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/19 23:54:51 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,12 @@ typedef struct s_ft_get_line_trie_node
 	t_ft_get_line_trie_child	*child[1 << CHAR_BIT];
 }	t_ft_get_line_trie_node;
 
+typedef union u_ft_get_line_trie_key
+{
+	int				fd;
+	unsigned char	index[sizeof(int)];
+}	t_ft_get_line_trie_key;
+
 typedef bool	t_err;
 
 t_err	ft_get_line(
@@ -72,11 +78,15 @@ t_err	ft_get_line_feed(
 			t_ft_get_line_context *context);
 
 t_err	ft_get_line_trie_pop(
-			t_ft_get_line_trie_child *root,
-			int fd_key);
+			t_ft_get_line_context **out,
+			t_ft_get_line_trie_child **node,
+			int key,
+			int level);
 
 t_err	ft_get_line_trie_push(
-			t_ft_get_line_trie_child *root,
-			int fd_key);
+			t_ft_get_line_context *value,
+			t_ft_get_line_trie_child **node,
+			int key,
+			int level);
 
 #endif
