@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:52:18 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/20 00:08:31 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/20 00:13:11 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	free(void *ptr)
 		real = dlsym(RTLD_NEXT, "free");
 	if (ptr)
 		fprintf(stderr, "free() called (allocated %d chunks)\n", --g_alloc);
-	return (real(ptr));
+	real(ptr);
 }
 
 //*/
