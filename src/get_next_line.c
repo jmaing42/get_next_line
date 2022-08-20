@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/20 21:47:54 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/21 00:35:43 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ static t_ft_get_line_context	*init_context(
 {
 	t_ft_get_line_context	*context;
 
-	if (!ft_get_line_trie_pop(&context, root, fd, 0))
+	if (ft_get_line_trie_pop(&context, root, fd, 0))
+		return (NULL);
+	if (context)
 		return (context);
 	context = malloc(sizeof(t_ft_get_line_context));
 	if (!context)
@@ -38,7 +40,7 @@ static t_ft_get_line_context	*init_context(
 
 char	*get_next_line(int fd)
 {
-	t_ft_get_line_trie_node			*node = NULL;
+	static t_ft_get_line_trie_node	*node = NULL;
 	char							*result;
 	size_t							unused_result_length;
 	t_ft_get_line_context *const	context = init_context(fd, &node);
@@ -97,7 +99,26 @@ t_err	ft_get_line_drain(
 	t_ft_get_line_context *context
 )
 {
-	//
+	size_t	i;
+	char	*result;
+
+	if (!context->tail)
+		return (false);
+	i = -1;
+	if (context->tail == context->head)
+		i = context->offset - 1;
+	while (++i < context->tail->length)
+		if (context->tail->buffer[i] == '\n')
+			break ;
+	if (return_complete_line && i == context->tail->length)
+		return (false);
+	*out_line_length = context->length - context->tail->length + i;
+	result = malloc(*out_line_length + 1);
+	if (!result)
+		return (true);
+	ft_get_line_drain_fill(result, *out_line_length, context);
+	*out_line = result;
+	return (false);
 }
 
 t_err	ft_get_line_feed(
@@ -106,5 +127,25 @@ t_err	ft_get_line_feed(
 	t_ft_get_line_context *context
 )
 {
-	//
+	t_ft_get_line_buffer_list_node *const	tail
+		= malloc(sizeof(t_ft_get_line_buffer_list_node));
+
+	if (!tail)
+	{
+		free(buffer);
+		return (true);
+	}
+	context->length++;
+	tail->buffer = buffer;
+	tail->length = length;
+	tail->prev = context->tail;
+	tail->next = NULL;
+	if (context->tail)
+		context->tail->next = tail;
+	else
+	{
+		context->head = tail;
+		context->tail = tail;
+	}
+	return (false);
 }

@@ -30,10 +30,10 @@ re:
 .PHONY: all bonus clean fclean re $(NAME)
 
 $(TMP_DIR)/%.a:
-	mkdir -p $(@D)
-	$(AR) rcs $@ $^
+	@mkdir -p $(@D)
+	$(AR) cr $@ $^
 $(TMP_DIR)/%$(SUFFIX).o: %.c
-	mkdir -p $(@D)
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@ $(if $(SANITIZER),-fsanitize=$(SANITIZER),)
 
 $(TMP_DIR)/$(NAME_BASIC): $(patsubst ./%.c,$(TMP_DIR)/%$(SUFFIX).o,$(SRCS_BASIC))

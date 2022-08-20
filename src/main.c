@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:52:18 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/20 00:13:11 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/21 00:34:01 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <dlfcn.h>
 
-/*
+// /*
 
 static int	g_alloc = 0;
 
@@ -58,7 +59,8 @@ int	main(void)
 	str = get_next_line(STDIN_FILENO);
 	while (str)
 	{
-		printf("read:\t%s", str);
+		write(STDOUT_FILENO, "read:\t", 6);
+		write(STDOUT_FILENO, str, strlen(str));
 		free(str);
 		str = get_next_line(STDIN_FILENO);
 	}

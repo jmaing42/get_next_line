@@ -2,16 +2,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "test",
-      "type": "cppdbg",
+      "type": "lldb",
       "request": "launch",
+      "name": "Debug",
       "program": "${workspaceFolder}/src/main.exe",
-      "args": [],
-      "stopAtEntry": false,
-      "cwd": "${fileDirname}",
-      "environment": [],
-      "externalConsole": true,
-      "MIMode": "lldb",
+      "cwd": "${workspaceFolder}/src",
+      "preLaunchTask": "build (debug)",
     },
   ],
 }
