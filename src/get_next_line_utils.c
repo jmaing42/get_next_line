@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 03:00:27 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/20 00:06:52 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/20 20:19:07 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,25 +38,25 @@ t_err	ft_get_line_trie_pop(
 	const t_ft_get_line_trie_key	k = {.fd = key};
 	bool							result;
 
-	if (level == sizeof(int))
-	{
-		*out = (*node)->leaf;
-		(*node)->leaf = NULL;
+	*out = NULL;
+	if (!*node)
 		return (false);
-	}
-	if (!(*node)->non_leaf->child[k.index[level]])
+	if (level == sizeof(int) - 1)
 	{
-		*out = NULL;
+		*out = (*node)->child[k.index[level]].leaf;
+		(*node)->child[k.index[level]].leaf = NULL;
+		if (--(*node)->child_count)
+			return (false);
+		free(*node);
+		*node = NULL;
 		return (false);
 	}
 	result = ft_get_line_trie_pop(
-			out, &(*node)->non_leaf->child[k.index[level]], key, level + 1);
-	if (!(*node)->non_leaf->child[k.index[level]]
-		&& !--(*node)->non_leaf->child_count)
-	{
-		free(*node);
-		*node = NULL;
-	}
+			out, &(*node)->child[k.index[level]].non_leaf, key, level + 1);
+	if ((*node)->child[k.index[level]].non_leaf || --(*node)->child_count)
+		return (result);
+	free(*node);
+	*node = NULL;
 	return (result);
 }
 
@@ -71,21 +71,20 @@ t_err	ft_get_line_trie_push(
 	bool							result;
 	bool							had_child;
 
-	if (level == sizeof(int))
-		(*node)->leaf = value;
-	if (level == sizeof(int))
-		return (false);
-	had_child = !!(*node)->non_leaf->child[k.index[level]];
-	if (!had_child)
-		(*node)->non_leaf->child[k.index[level]]
-			= ft_calloc(1, sizeof(t_ft_get_line_trie_child));
-	if (!(*node)->non_leaf->child[k.index[level]])
+	if (!*node)
+		*node = ft_calloc(1, sizeof(t_ft_get_line_trie_child));
+	if (!*node)
 		return (true);
+	if (level == sizeof(int) - 1)
+	{
+		(*node)->child[k.index[level]].leaf = value;
+		return (false);
+	}
 	result = ft_get_line_trie_push(
-			value, &(*node)->non_leaf->child[k.index[level]], key, level + 1);
-	if (!had_child && (*node)->non_leaf->child[k.index[level]])
-		(*node)->non_leaf->child_count++;
-	if (!(*node)->non_leaf->child_count)
+			value, &(*node)->child[k.index[level]].non_leaf, key, level + 1);
+	if ((*node)->child[k.index[level]].non_leaf)
+		(*node)->child_count++;
+	if (!(*node)->child_count)
 	{
 		free(*node);
 		*node = NULL;

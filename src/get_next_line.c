@@ -3,94 +3,107 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/04/28 14:05:37 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/08/20 20:08:01 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-#include <unistd.h>
 #include <stdlib.h>
 
-static t_lstring	*read_lstring(int fd)
+static t_ft_get_line_context	*init_context(
+	int fd,
+	s_ft_get_line_trie_node *root
+)
 {
-	t_lstring *const	result = malloc(sizeof(t_lstring) + BUFFER_SIZE);
-	ssize_t				length;
+	t_ft_get_line_context	context;
 
-	if (!result)
+	if (!ft_get_line_trie_pop(&context, root, fd, 0))
+		return (context);
+	context = malloc(sizeof(t_ft_get_line_context));
+	if (!context)
 		return (NULL);
-	length = read(fd, result->extra, BUFFER_SIZE);
-	if (length < 0)
-		return (free(result), NULL);
-	result->len = length;
-	return (result);
-}
-
-static t_lstring	*concat(t_lstring *a, t_lstring *b)
-{
-	t_lstring	*result;
-	size_t		i;
-
-	result = NULL;
-	if (a && b)
-		result = malloc(sizeof(t_lstring) + a->len + b->len);
-	if (result)
-	{
-		result->len = a->len + b->len;
-		i = -1;
-		while (++i < a->len)
-			result->extra[i] = a->extra[i];
-		i--;
-		while (++i < result->len)
-			result->extra[i] = b->extra[i - a->len];
-	}
-	return (free(a), free(b), result);
-}
-
-static char	*lstrtocstr(t_lstring *from)
-{
-	char	*result;
-	size_t	i;
-
-	if (!from)
-		return (NULL);
-	if (!from->len)
-		return (free(from), NULL);
-	result = malloc(from->len + 1);
-	i = -1;
-	if (!result)
-		return (free(from), NULL);
-	while (++i < from->len)
-		result[i] = from->extra[i];
-	result[i] = '\0';
-	return (free(from), result);
+	context->head = NULL;
+	context->tail = NULL;
+	context->offset = 0;
+	context->length = 0;
+	context->fd = fd;
+	context->eof = false;
+	return (context);
 }
 
 char	*get_next_line(int fd)
 {
-	static void	**map = NULL;
-	t_lstring	*buffer;
-	t_lstring	*current;
+	static s_ft_get_line_trie_node	*node = NULL;
+	char							*result;
+	size_t							unused_result_length;
+	t_ft_get_line_context *const	context = init_context(fd, &node);
 
-	current = tr_p(&map, *((unsigned int *)&fd), 0);
-	while (!current || lstrlen_until(current, '\n') == current->len)
-	{
-		buffer = read_lstring(fd);
-		if (buffer && buffer->len == 0)
-			return (free(buffer), lstrtocstr(current));
-		if (!current)
-			current = buffer;
-		else
-			current = concat(current, buffer);
-		if (!current)
-			return (free(current), NULL);
-	}
-	if (lstrsplit(current, &current, &buffer, lstrlen_until(current, '\n') + 1))
+	if (!context)
 		return (NULL);
-	if (tr_a(&map, *((unsigned int *)&fd), 0, buffer))
-		return (free(current), NULL);
-	return (lstrtocstr(current));
+	if (ft_get_line(&result, &unused_result_length, context))
+	{
+		ft_get_line_free(context);
+		return (true);
+	}
+	if (!result)
+		ft_get_line_free(context);
+	else if (ft_get_line_trie_push(context, &root, fd, 0))
+		return (true);
+	return (result);
+}
+
+t_err	ft_get_line(
+	char **out_line,
+	size_t *out_line_length,
+	t_ft_get_line_context *context
+)
+{
+	char	*buffer;
+	ssize_t	bytes_read;
+
+	*out_line = NULL;
+	if (ft_get_line_drain(out_line, out_line_length, !context->eof, context))
+		return (true);
+	while (!*out_line)
+	{
+		buffer = malloc(BUFFER_SIZE);
+		if (!buffer)
+			return (true);
+		bytes_read = read(context->fd, buffer, BUFFER_SIZE);
+		if (bytes_read < 0)
+		{
+			free(buffer);
+			return (true);
+		}
+		else if (bytes_read == 0)
+			context->eof = true;
+		if (ft_get_line_feed(buffer, length, context)
+			|| ft_get_line_drain(
+				out_line, out_line_length, !context->eof, context))
+			return (true);
+	}
+	return (false);
+}
+
+t_err	ft_get_line_drain(
+	char **out_line,
+	size_t *out_line_length,
+	bool *out_is_eof,
+	t_ft_get_line_context *context
+)
+{
+	//
+}
+
+t_err	ft_get_line_feed(
+	char *buffer,
+	size_t length,
+	t_ft_get_line_context *context
+)
+{
+	//
 }
