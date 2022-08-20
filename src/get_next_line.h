@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 21:36:47 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/20 20:03:51 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/20 21:40:55 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,13 +109,13 @@ void	ft_get_line_free(
 
 t_err	ft_get_line_trie_pop(
 			t_ft_get_line_context **out,
-			t_ft_get_line_trie_child **node,
+			t_ft_get_line_trie_node **node,
 			int key,
 			int level);
 
 t_err	ft_get_line_trie_push(
 			t_ft_get_line_context *value,
-			t_ft_get_line_trie_child **node,
+			t_ft_get_line_trie_node **node,
 			int key,
 			int level);
 

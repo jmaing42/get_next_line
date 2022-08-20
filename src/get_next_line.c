@@ -6,20 +6,21 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/20 20:08:01 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/20 21:47:54 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 #include <stdlib.h>
+#include <unistd.h>
 
 static t_ft_get_line_context	*init_context(
 	int fd,
-	s_ft_get_line_trie_node *root
+	t_ft_get_line_trie_node **root
 )
 {
-	t_ft_get_line_context	context;
+	t_ft_get_line_context	*context;
 
 	if (!ft_get_line_trie_pop(&context, root, fd, 0))
 		return (context);
@@ -37,7 +38,7 @@ static t_ft_get_line_context	*init_context(
 
 char	*get_next_line(int fd)
 {
-	static s_ft_get_line_trie_node	*node = NULL;
+	t_ft_get_line_trie_node			*node = NULL;
 	char							*result;
 	size_t							unused_result_length;
 	t_ft_get_line_context *const	context = init_context(fd, &node);
@@ -47,12 +48,12 @@ char	*get_next_line(int fd)
 	if (ft_get_line(&result, &unused_result_length, context))
 	{
 		ft_get_line_free(context);
-		return (true);
+		return (NULL);
 	}
 	if (!result)
 		ft_get_line_free(context);
-	else if (ft_get_line_trie_push(context, &root, fd, 0))
-		return (true);
+	else if (ft_get_line_trie_push(context, &node, fd, 0))
+		return (NULL);
 	return (result);
 }
 
@@ -81,7 +82,7 @@ t_err	ft_get_line(
 		}
 		else if (bytes_read == 0)
 			context->eof = true;
-		if (ft_get_line_feed(buffer, length, context)
+		if (ft_get_line_feed(buffer, bytes_read, context)
 			|| ft_get_line_drain(
 				out_line, out_line_length, !context->eof, context))
 			return (true);
@@ -92,7 +93,7 @@ t_err	ft_get_line(
 t_err	ft_get_line_drain(
 	char **out_line,
 	size_t *out_line_length,
-	bool *out_is_eof,
+	bool return_complete_line,
 	t_ft_get_line_context *context
 )
 {

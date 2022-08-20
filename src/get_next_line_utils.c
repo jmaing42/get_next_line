@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 03:00:27 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/20 20:19:07 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/20 21:41:04 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static inline void	*ft_calloc(size_t count, size_t size)
 
 t_err	ft_get_line_trie_pop(
 	t_ft_get_line_context **out,
-	t_ft_get_line_trie_child **node,
+	t_ft_get_line_trie_node **node,
 	int key,
 	int level
 )
@@ -62,7 +62,7 @@ t_err	ft_get_line_trie_pop(
 
 t_err	ft_get_line_trie_push(
 	t_ft_get_line_context *value,
-	t_ft_get_line_trie_child **node,
+	t_ft_get_line_trie_node **node,
 	int key,
 	int level
 )
@@ -72,7 +72,7 @@ t_err	ft_get_line_trie_push(
 	bool							had_child;
 
 	if (!*node)
-		*node = ft_calloc(1, sizeof(t_ft_get_line_trie_child));
+		*node = ft_calloc(1, sizeof(t_ft_get_line_trie_node));
 	if (!*node)
 		return (true);
 	if (level == sizeof(int) - 1)
