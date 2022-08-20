@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/21 00:35:43 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/21 01:05:25 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,11 @@ char	*get_next_line(int fd)
 	if (!result)
 		ft_get_line_free(context);
 	else if (ft_get_line_trie_push(context, &node, fd, 0))
+	{
+		ft_get_line_free(context);
+		free(result);
 		return (NULL);
+	}
 	return (result);
 }
 
@@ -110,13 +114,14 @@ t_err	ft_get_line_drain(
 	while (++i < context->tail->length)
 		if (context->tail->buffer[i] == '\n')
 			break ;
-	if (return_complete_line && i == context->tail->length)
+	if (return_complete_line && i == context->tail->length - 1)
 		return (false);
 	*out_line_length = context->length - context->tail->length + i;
 	result = malloc(*out_line_length + 1);
 	if (!result)
 		return (true);
 	ft_get_line_drain_fill(result, *out_line_length, context);
+	result[*out_line_length] = '\0';
 	*out_line = result;
 	return (false);
 }
