@@ -1,20 +1,16 @@
 {
   "files.exclude": {
     ".vscode": true,
-    "**/*.{o,d,bc,i,s,exe,a,lib,so,dll,dylib}": true,
+    "**/.cache": true,
+    "**/*.{exe,dSYM}": true,
+    "**/compile_commands.json": true,
+    "**/*.part.json": true
   },
   "files.associations": {
     "*.h": "c",
   },
-  "C_Cpp.default.includePath": [
-    "${workspaceFolder}/src"
-  ],
-  "c-cpp-flylint.includePaths": [
-    "${workspaceFolder}/src"
-  ],
-  "C_Cpp.default.cStandard": "c99",
-  "c-cpp-flylint.standard": [
-    "c99",
-    "c++98"
-  ],
+  "clangd.detectExtensionConflicts": false,
+  "C_Cpp.autocomplete": "Disabled",
+  "C_Cpp.default.compileCommands": "${workspaceFolder}/compile_commands.json",
+  "sonarlint.pathToCompileCommands": "${workspaceFolder}/compile_commands.json",
 }
