@@ -7,3 +7,4 @@
 tmp
 *.dSYM
 compile_commands.json
+.cache
