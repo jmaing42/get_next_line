@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/21 01:05:25 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/23 01:08:51 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,20 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static t_ft_get_line_context	*init_context(
-	int fd,
-	t_ft_get_line_trie_node **root
-)
+static t_ft_get_line_context	*init_context(int fd)
 {
-	t_ft_get_line_context	*context;
+	t_ft_get_line_context *const	result
+		= malloc(sizeof(t_ft_get_line_context));
 
-	if (ft_get_line_trie_pop(&context, root, fd, 0))
+	if (!result)
 		return (NULL);
-	if (context)
-		return (context);
-	context = malloc(sizeof(t_ft_get_line_context));
-	if (!context)
-		return (NULL);
-	context->head = NULL;
-	context->tail = NULL;
-	context->offset = 0;
-	context->length = 0;
-	context->fd = fd;
-	context->eof = false;
-	return (context);
+	result->head = NULL;
+	result->tail = NULL;
+	result->offset = 0;
+	result->length = 0;
+	result->fd = fd;
+	result->eof = false;
+	return (result);
 }
 
 char	*get_next_line(int fd)
@@ -43,8 +36,10 @@ char	*get_next_line(int fd)
 	static t_ft_get_line_trie_node	*node = NULL;
 	char							*result;
 	size_t							unused_result_length;
-	t_ft_get_line_context *const	context = init_context(fd, &node);
+	t_ft_get_line_context			*context;
 
+	if (!ft_get_line_trie_pop(&context, &node, fd, 0))
+		context = init_context(fd);
 	if (!context)
 		return (NULL);
 	if (ft_get_line(&result, &unused_result_length, context))
@@ -52,9 +47,7 @@ char	*get_next_line(int fd)
 		ft_get_line_free(context);
 		return (NULL);
 	}
-	if (!result)
-		ft_get_line_free(context);
-	else if (ft_get_line_trie_push(context, &node, fd, 0))
+	if (!result || ft_get_line_trie_push(context, &node, fd, 0))
 	{
 		ft_get_line_free(context);
 		free(result);
@@ -75,7 +68,7 @@ t_err	ft_get_line(
 	*out_line = NULL;
 	if (ft_get_line_drain(out_line, out_line_length, !context->eof, context))
 		return (true);
-	while (!*out_line)
+	while (!*out_line && !context->eof)
 	{
 		buffer = malloc(BUFFER_SIZE);
 		if (!buffer)
@@ -114,8 +107,10 @@ t_err	ft_get_line_drain(
 	while (++i < context->tail->length)
 		if (context->tail->buffer[i] == '\n')
 			break ;
-	if (return_complete_line && i == context->tail->length - 1)
+	if (return_complete_line && i == context->tail->length)
 		return (false);
+	if (return_complete_line && i != context->tail->length)
+		i++;
 	*out_line_length = context->length - context->tail->length + i;
 	result = malloc(*out_line_length + 1);
 	if (!result)
@@ -140,7 +135,7 @@ t_err	ft_get_line_feed(
 		free(buffer);
 		return (true);
 	}
-	context->length++;
+	context->length += length;
 	tail->buffer = buffer;
 	tail->length = length;
 	tail->prev = context->tail;
@@ -148,9 +143,7 @@ t_err	ft_get_line_feed(
 	if (context->tail)
 		context->tail->next = tail;
 	else
-	{
 		context->head = tail;
-		context->tail = tail;
-	}
+	context->tail = tail;
 	return (false);
 }

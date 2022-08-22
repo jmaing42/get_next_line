@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 03:00:27 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/21 00:25:16 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/23 01:06:11 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,17 @@ t_err	ft_get_line_trie_pop(
 	const t_ft_get_line_trie_key	k = {.fd = key};
 	bool							result;
 
-	*out = NULL;
-	if (!*node)
+	if (!*node || !(*node)->child[k.index[level]].any)
 		return (false);
 	if (level == sizeof(int) - 1)
 	{
 		*out = (*node)->child[k.index[level]].leaf;
 		(*node)->child[k.index[level]].leaf = NULL;
 		if (--(*node)->child_count)
-			return (false);
+			return (true);
 		free(*node);
 		*node = NULL;
-		return (false);
+		return (true);
 	}
 	result = ft_get_line_trie_pop(
 			out, &(*node)->child[k.index[level]].non_leaf, key, level + 1);
@@ -108,14 +107,14 @@ void	ft_get_line_drain_fill(
 		result[i] = context->head->buffer[context->offset + current_index];
 		if (context->offset + ++current_index == context->head->length)
 		{
-			tmp = context->head;
-			if (!context->head->next)
-				context->tail = NULL;
 			length -= i;
 			result += i;
 			i = 0;
+			tmp = context->head;
 			context->head = context->head->next;
 			context->offset = 0;
+			if (!context->head)
+				context->tail = NULL;
 			free(tmp->buffer);
 			free(tmp);
 		}

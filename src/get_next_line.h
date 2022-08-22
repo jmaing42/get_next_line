@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 21:36:47 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/20 22:55:33 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/23 00:47:53 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef union u_ft_get_line_trie_child
 {
 	struct s_ft_get_line_trie_node	*non_leaf;
 	t_ft_get_line_context			*leaf;
+	void							*any;
 }	t_ft_get_line_trie_child;
 
 typedef struct s_ft_get_line_trie_node
@@ -114,7 +115,18 @@ t_err	ft_get_line_feed(
 void	ft_get_line_free(
 			t_ft_get_line_context *context);
 
-t_err	ft_get_line_trie_pop(
+/**
+ * @brief remove value associated with key, and get removed value
+ *
+ * @param out result
+ * @param node address of trie node
+ * @param key dictionary key
+ * @param level for internal use, default 0
+ * @return true if key exists
+ * @return false if key not exists
+ * @remarks *out is available only if true is returned
+ */
+bool	ft_get_line_trie_pop(
 			t_ft_get_line_context **out,
 			t_ft_get_line_trie_node **node,
 			int key,
