@@ -38,3 +38,9 @@ $(TMP_DIR)/%$(SUFFIX).o: %.c
 
 $(TMP_DIR)/$(NAME_BASIC): $(patsubst ./%.c,$(TMP_DIR)/%$(SUFFIX).o,$(SRCS_BASIC))
 $(TMP_DIR)/$(NAME_BONUS): $(patsubst ./%.c,$(TMP_DIR)/%$(SUFFIX).o,$(SRCS_BONUS))
+
+../compile_commands.json: get_next_line.part.json get_next_line_utils.part.json
+	@(printf "[\n" && cat $^ && printf "]") > $@
+
+%.part.json: %.c
+	@clang -MJ $@ -c $< -o /dev/null

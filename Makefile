@@ -37,3 +37,7 @@ endif
 	$Qgit push "$(GIT_REMOTE_URL)" HEAD:source || echo "Failed to push HEAD to source"
 publish: test publish_without_test
 .PHONY: all clean fclean re init deinit reinit refresh test publish publish_without_test
+
+.PHONY: compile_commands.json
+compile_commands.json:
+	@make -C src ../compile_commands.json
