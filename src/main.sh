@@ -1,6 +1,6 @@
 #!/bin/sh
 
-make && \
+make SANITIZER=address && \
 clang \
 	-Wall -Wextra -Werror \
 	-fsanitize=address -g3 \

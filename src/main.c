@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:52:18 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/21 01:03:24 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/24 00:29:06 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	*malloc(size_t size)
 	void		*result;
 
 	if (!real)
-		real = dlsym(RTLD_NEXT, "malloc");
+		real = (void *(*)(size_t))dlsym(RTLD_NEXT, "malloc");
 	result = real(size);
 	write(STDERR_FILENO, "malloc called(", 14);
 	ft_putnbr(STDERR_FILENO, size);
@@ -58,7 +58,7 @@ void	free(void *ptr)
 	static void	(*real)(void *);
 
 	if (!real)
-		real = dlsym(RTLD_NEXT, "free");
+		real = (void (*)(void *))dlsym(RTLD_NEXT, "free");
 	if (ptr)
 	{
 		write(STDERR_FILENO, "free() called (allocated ", 25);
