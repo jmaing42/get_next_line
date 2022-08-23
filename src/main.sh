@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 make SANITIZER=address && \
 clang \
 	-Wall -Wextra -Werror \

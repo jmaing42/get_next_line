@@ -10,5 +10,14 @@
       },
       "problemMatcher": ["$gcc"]
     },
+    {
+      "label": "build trie test (debug)",
+      "type": "shell",
+      "command": "(cd ../.. && sh main.sh) && make main.exe",
+      "options": {
+        "cwd": "${workspaceFolder}/src/test/trie",
+      },
+      "problemMatcher": ["$gcc"]
+    },
   ],
 }

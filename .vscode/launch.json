@@ -9,5 +9,13 @@
       "cwd": "${workspaceFolder}/src",
       "preLaunchTask": "build (debug)",
     },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug trie test",
+      "program": "${workspaceFolder}/src/test/trie/main.exe",
+      "cwd": "${workspaceFolder}/src/test/trie",
+      "preLaunchTask": "build trie test (debug)",
+    },
   ],
 }
