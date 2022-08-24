@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 23:59:16 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/08/24 23:33:39 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/24 23:40:42 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <dlfcn.h>
 
 static int	g_alloc = 0;
