@@ -19,5 +19,14 @@
       },
       "problemMatcher": ["$gcc"]
     },
+    {
+      "label": "build get_line test (debug)",
+      "type": "shell",
+      "command": "(cd ../.. && sh main.sh) && make main.exe",
+      "options": {
+        "cwd": "${workspaceFolder}/src/test/get_line",
+      },
+      "problemMatcher": ["$gcc"]
+    },
   ],
 }

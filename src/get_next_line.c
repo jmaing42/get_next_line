@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/23 22:17:27 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/24 23:42:39 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static t_ft_get_line_context	*init_context(int fd)
+t_ft_get_line_context	*ft_get_line_init_context(int fd)
 {
 	t_ft_get_line_context *const	result
 		= malloc(sizeof(t_ft_get_line_context));
@@ -39,7 +39,7 @@ char	*get_next_line(int fd)
 	t_ft_get_line_context			*context;
 
 	if (!ft_get_line_trie_pop(&context, &node, fd, 0))
-		context = init_context(fd);
+		context = ft_get_line_init_context(fd);
 	if (!context)
 		return (NULL);
 	if (ft_get_line(&result, &unused_result_length, context))

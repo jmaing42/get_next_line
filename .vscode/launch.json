@@ -17,5 +17,13 @@
       "cwd": "${workspaceFolder}/src/test/trie",
       "preLaunchTask": "build trie test (debug)",
     },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug get_line test",
+      "program": "${workspaceFolder}/src/test/get_line/main.exe",
+      "cwd": "${workspaceFolder}/src/test/get_line",
+      "preLaunchTask": "build get_line test (debug)",
+    },
   ],
 }

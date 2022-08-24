@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 21:36:47 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/23 00:47:53 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/24 23:43:49 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #  error "BUFFER_SIZE must be positive number"
 # endif
 
-char	*get_next_line(int fd);
+char					*get_next_line(int fd);
 
 typedef struct s_ft_get_line_buffer_list_node
 {
@@ -72,10 +72,13 @@ typedef bool	t_err;
  * @param context drain target
  * @return t_err true if failed
  */
-t_err	ft_get_line(
-			char **out_line,
-			size_t *out_line_length,
-			t_ft_get_line_context *context);
+t_err					ft_get_line(
+							char **out_line,
+							size_t *out_line_length,
+							t_ft_get_line_context *context);
+
+t_ft_get_line_context	*ft_get_line_init_context(
+							int fd);
 
 /**
  * @brief drain line from get_line_context
@@ -87,16 +90,16 @@ t_err	ft_get_line(
  * @return t_err true if failed
  * @remarks this is internal function for ft_get_line
  */
-t_err	ft_get_line_drain(
-			char **out_line,
-			size_t *out_line_length,
-			bool return_complete_line,
-			t_ft_get_line_context *context);
+t_err					ft_get_line_drain(
+							char **out_line,
+							size_t *out_line_length,
+							bool return_complete_line,
+							t_ft_get_line_context *context);
 
-void	ft_get_line_drain_fill(
-			char *result,
-			size_t length,
-			t_ft_get_line_context *context);
+void					ft_get_line_drain_fill(
+							char *result,
+							size_t length,
+							t_ft_get_line_context *context);
 
 /**
  * @brief feed buffer to get_line_context, if ft_get_line_drain() brought NULL
@@ -107,13 +110,13 @@ void	ft_get_line_drain_fill(
  * @return t_err true if failed
  * @remarks this is internal function for ft_get_line
  */
-t_err	ft_get_line_feed(
-			char *buffer,
-			size_t length,
-			t_ft_get_line_context *context);
+t_err					ft_get_line_feed(
+							char *buffer,
+							size_t length,
+							t_ft_get_line_context *context);
 
-void	ft_get_line_free(
-			t_ft_get_line_context *context);
+void					ft_get_line_free(
+							t_ft_get_line_context *context);
 
 /**
  * @brief remove value associated with key, and get removed value
@@ -126,16 +129,16 @@ void	ft_get_line_free(
  * @return false if key not exists
  * @remarks *out is available only if true is returned
  */
-bool	ft_get_line_trie_pop(
-			t_ft_get_line_context **out,
-			t_ft_get_line_trie_node **node,
-			int key,
-			int level);
+bool					ft_get_line_trie_pop(
+							t_ft_get_line_context **out,
+							t_ft_get_line_trie_node **node,
+							int key,
+							int level);
 
-t_err	ft_get_line_trie_push(
-			t_ft_get_line_context *value,
-			t_ft_get_line_trie_node **node,
-			int key,
-			int level);
+t_err					ft_get_line_trie_push(
+							t_ft_get_line_context *value,
+							t_ft_get_line_trie_node **node,
+							int key,
+							int level);
 
 #endif
