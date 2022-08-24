@@ -15,6 +15,3 @@ re: fclean
 	$(MAKE) all
 main.exe: main.o ../../get_next_line.a
 	$(CC) $(LDFLAGS) -o $@ $^
-
-re: fclean
-	$(MAKE) all
