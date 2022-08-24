@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 23:59:16 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/08/25 00:01:13 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/25 00:38:47 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ int	main(int argc, char **argv)
 	char							*str;
 	size_t							unused_line_length;
 
+	if (!context)
+		return (EXIT_FAILURE);
 	if (ft_get_line(&str, &unused_line_length, context))
 		return (EXIT_FAILURE);
 	while (str)
