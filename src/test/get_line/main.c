@@ -6,16 +6,13 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 23:59:16 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/08/25 00:38:47 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/25 08:31:37 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../get_next_line.h"
 
-#include <stdbool.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
 
@@ -30,19 +27,20 @@ int	main(int argc, char **argv)
 {
 	const int						fd = initial_fd(argc, argv);
 	t_ft_get_line_context *const	context = ft_get_line_init_context(fd);
-	char							*str;
-	size_t							unused_line_length;
+	char							*line;
+	size_t							length;
 
 	if (!context)
 		return (EXIT_FAILURE);
-	if (ft_get_line(&str, &unused_line_length, context))
+	if (ft_get_line(&line, &length, context))
 		return (EXIT_FAILURE);
-	while (str)
+	while (line)
 	{
-		write(STDOUT_FILENO, str, strlen(str));
-		free(str);
-		if (ft_get_line(&str, &unused_line_length, context))
+		write(STDOUT_FILENO, line, length);
+		free(line);
+		if (ft_get_line(&line, &length, context))
 			return (EXIT_FAILURE);
 	}
+	ft_get_line_free(context);
 	return (EXIT_SUCCESS);
 }

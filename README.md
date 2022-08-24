@@ -55,6 +55,7 @@ int    main(int argc, char **argv)
         if (ft_get_line(&str, &length, context))
             return (EXIT_FAILURE);
     }
+    ft_get_line_free(context);
     return (EXIT_SUCCESS);
 }
 ```
