@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 03:00:27 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/23 01:23:04 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/24 23:19:47 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static inline void	*ft_calloc(size_t count, size_t size)
 	return (result);
 }
 
-t_err	ft_get_line_trie_pop(
+bool	ft_get_line_trie_pop(
 	t_ft_get_line_context **out,
 	t_ft_get_line_trie_node **node,
 	int key,
