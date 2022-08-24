@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 23:59:16 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/08/24 00:35:59 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/24 23:05:32 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	main(int argc, char **argv)
 	t_ft_get_line_trie_node	*root;
 	int						command;
 
+	root = NULL;
 	if (argc > 1 && !freopen(argv[1], "r", stdin))
 		return (EXIT_FAILURE);
 	while (scanf("%d", &command) == 1)
