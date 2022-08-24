@@ -6,7 +6,7 @@ LDFLAGS = -fsanitize=address
 
 .PHONY: test
 test: main.exe
-	find cases -name "*.txt" | xargs ./main.exe
+	find cases -name "*.txt" | sort | xargs -L1 ./main.exe
 clean:
 	rm *.o
 fclean: clean
