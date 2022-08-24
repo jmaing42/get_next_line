@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 23:59:16 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/08/24 23:05:32 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/24 23:33:39 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,34 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <dlfcn.h>
+
+static int	g_alloc = 0;
+
+void	*malloc(size_t size)
+{
+	static void	*(*real)(size_t);
+	void		*result;
+
+	if (!real)
+		real = (void *(*)(size_t))dlsym(RTLD_NEXT, "malloc");
+	result = real(size);
+	if (result)
+		g_alloc++;
+	return (result);
+}
+
+void	free(void *ptr)
+{
+	static void	(*real)(void *);
+
+	if (!real)
+		real = (void (*)(void *))dlsym(RTLD_NEXT, "free");
+	if (ptr)
+		g_alloc--;
+	real(ptr);
+}
 
 static bool	test_pop(t_ft_get_line_trie_node **root)
 {
@@ -60,5 +88,7 @@ int	main(int argc, char **argv)
 		)
 			return (EXIT_FAILURE);
 	}
+	if (g_alloc)
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

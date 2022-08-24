@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 03:00:27 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/24 23:19:47 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/24 23:32:33 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ t_err	ft_get_line_trie_push(
 	if (level == sizeof(int) - 1)
 	{
 		(*node)->child[k.index[level]].leaf = value;
+		(*node)->child_count++;
 		return (false);
 	}
 	result = ft_get_line_trie_push(
