@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 03:00:27 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/25 21:10:17 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/25 21:28:04 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ void	ft_get_line_drain_fill(
 	size_t							i;
 
 	context->length -= length;
+	result[length] = '\0';
 	i = 0;
 	while (i < length)
 	{
