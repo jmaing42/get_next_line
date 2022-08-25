@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 03:00:27 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/24 23:32:33 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/25 21:10:17 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ void	ft_get_line_drain_fill(
 	t_ft_get_line_buffer_list_node	*tmp;
 	size_t							i;
 
+	context->length -= length;
 	i = 0;
 	while (i < length)
 	{
