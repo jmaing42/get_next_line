@@ -1,0 +1,26 @@
+1
+2
+3
+4
+5
+aA
+bB
+cC
+dD
+eE
+1Aa
+2Bb
+3Cc
+4Dd
+5Ee
+ABCD
+abcd
+1234
+abcd
+ABCD
+54321
+EDCBA
+decba
+EDCBA
+54321
+POSIX requires nl at last to text files
