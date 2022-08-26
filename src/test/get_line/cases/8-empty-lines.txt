@@ -17,6 +17,7 @@ it uses `ft_get_line` internally which provides better prototype
 - to handle error (was no distinction between EOF and error)
 - to handle string containing null characters (provides length)
 - to reduce overhead to find context associated with the fd
+- to free context for fd at any time (was on EOF or error)
 
 
 
