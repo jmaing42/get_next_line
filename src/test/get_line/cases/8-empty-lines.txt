@@ -1,0 +1,53 @@
+# get_next_line
+
+getline() alternative
+
+```c
+char    *get_next_line(int fd);
+```
+
+return line by line, `NULL` on EOF or error
+
+## Usage
+
+because of poor prototype of `get_next_line` function,
+
+it uses `ft_get_line` internally which provides better prototype
+
+- to handle error (was no distinction between EOF and error)
+- to handle string containing null characters (provides length)
+- to reduce overhead to find context associated with the fd
+
+
+
+
+
+
+all: test
+
+CC = clang
+CFLAGS = -Wall -Wextra -Werror -pedantic -std=c99 -g3 -fsanitize=address
+LDFLAGS = -fsanitize=address
+
+.PHONY: test
+test: main.exe
+	find cases -name "*.txt" | sort | xargs -L1 ./main.exe
+
+.PHONY: clean
+clean:
+	rm *.o
+
+.PHONY: fclean
+fclean: clean
+	rm main.exe
+
+.PHONY: re
+re: fclean
+	$(MAKE) all
+
+main.exe: main.o ../../get_next_line.a
+	$(CC) $(LDFLAGS) -o $@ $^
+
+.PHONY: ../../get_next_line.a
+../../get_next_line.a:
+	$(MAKE) -C ../.. SANITIZE=address
