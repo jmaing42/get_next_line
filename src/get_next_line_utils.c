@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 03:00:27 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/27 10:58:29 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/27 15:53:27 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ t_ft_get_line_context	*ft_get_line_context(
 	return (result);
 }
 
-void	ft_get_line_drain(
+t_err	ft_get_line_drain(
 	char **out_line,
 	size_t *out_line_length,
 	bool return_complete_line,
@@ -148,12 +148,12 @@ void	ft_get_line_drain(
 		context->head = context->head->next;
 		if (context->head == NULL)
 			context->tail = NULL;
-		*out_line = tmp->buffer;
+		*out_line = ft_get_line_internal_allocate(
+				tmp->buffer, tmp->length + 1, tmp->length + 1);
 		*out_line_length = tmp->length;
 		free(tmp);
+		return (!*out_line);
 	}
-	else
-	{
-		*out_line = NULL;
-	}
+	*out_line = NULL;
+	return (false);
 }

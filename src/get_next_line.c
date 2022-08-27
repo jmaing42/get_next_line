@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/27 15:46:48 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/27 15:51:32 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ t_err	ft_get_line(
 	ssize_t	bytes_read;
 
 	*out_line = NULL;
-	ft_get_line_drain(out_line, out_line_length, !context->eof, context);
+	if (ft_get_line_drain(out_line, out_line_length, !context->eof, context))
+		return (true);
 	while (!*out_line && !context->eof)
 	{
 		bytes_read = read(context->fd, buffer, BUFFER_SIZE);
@@ -58,9 +59,12 @@ t_err	ft_get_line(
 			return (true);
 		else if (bytes_read == 0)
 			context->eof = true;
-		if (ft_get_line_feed(buffer, bytes_read, context))
+		if (
+			ft_get_line_feed(buffer, bytes_read, context)
+			|| ft_get_line_drain(
+				out_line, out_line_length, !context->eof, context)
+		)
 			return (true);
-		ft_get_line_drain(out_line, out_line_length, !context->eof, context);
 	}
 	return (false);
 }

@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 21:36:47 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/27 11:02:57 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/27 15:50:56 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ t_ft_get_line_context	*ft_get_line_context(
  * @param context drain target
  * @remarks this is internal function for ft_get_line
  */
-void					ft_get_line_drain(
+t_err					ft_get_line_drain(
 							char **out_line,
 							size_t *out_line_length,
 							bool return_complete_line,
