@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/27 15:42:54 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/27 15:46:48 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ static t_err	ft_get_line_feed_line_new(
 	size_t							i;
 
 	tmp = malloc(sizeof(t_ft_get_line_buffer_list_node));
+	if (!tmp)
+		return (true);
 	tmp->buffer = malloc(length + 1);
 	if (!tmp->buffer)
 	{
