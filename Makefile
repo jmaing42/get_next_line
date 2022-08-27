@@ -22,10 +22,14 @@ reinit:
 	$Q$(MAKE) -C test reinit
 refresh:
 	$Q$(MAKE) -C test refresh
-test:
+test: generate_bonus
 	$Q$(MAKE) -C test test
 	@echo "Some test might need manual review"
-publish_without_test:
+generate_bonus:
+	$Qpatch -o src/get_next_line_bonus.h src/get_next_line.h src/get_next_line.h.patch
+	$Qpatch -o src/get_next_line_bonus.c src/get_next_line.c src/get_next_line.c.patch
+	$Qpatch -o src/get_next_line_utils_bonus.c src/get_next_line_utils.c src/get_next_line_utils.c.patch
+publish_without_test: generate_bonus
 ifndef GIT_REMOTE_URL
 	$(error GIT_REMOTE_URL is undefined)
 endif
@@ -36,7 +40,7 @@ endif
 	$Qrm -rf tmp
 	$Qgit push "$(GIT_REMOTE_URL)" HEAD:source || echo "Failed to push HEAD to source"
 publish: test publish_without_test
-.PHONY: all clean fclean re init deinit reinit refresh test publish publish_without_test
+.PHONY: all clean fclean re init deinit reinit refresh test generate_bonus publish publish_without_test
 
 .PHONY: compile_commands.json
 compile_commands.json:

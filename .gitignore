@@ -8,3 +8,6 @@ tmp
 *.dSYM
 compile_commands.json
 .cache
+src/get_next_line_bonus.h
+src/get_next_line_bonus.c
+src/get_next_line_utils_bonus.c

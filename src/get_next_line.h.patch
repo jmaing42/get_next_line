@@ -1,0 +1,10 @@
+4c4
+< /*   get_next_line.h                                    :+:      :+:    :+:   */
+---
+> /*   get_next_line_bonus.h                              :+:      :+:    :+:   */
+13,14c13,14
+< #ifndef GET_NEXT_LINE_H
+< # define GET_NEXT_LINE_H
+---
+> #ifndef GET_NEXT_LINE_BONUS_H
+> # define GET_NEXT_LINE_BONUS_H
