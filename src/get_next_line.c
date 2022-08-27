@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/27 18:49:03 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/27 23:42:37 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,25 +75,24 @@ static t_err	ft_get_line_feed_line_new(
 	t_ft_get_line_context *context
 )
 {
-	t_ft_get_line_buffer_list_node	*tmp;
-	size_t							i;
+	t_ft_get_line_buffer_list_node *const	tmp
+		= malloc(sizeof(t_ft_get_line_buffer_list_node));
+	char *const								tmp_buffer = malloc(length + 1);
 
-	tmp = malloc(sizeof(t_ft_get_line_buffer_list_node));
-	if (!tmp)
-		return (true);
-	tmp->buffer = ft_get_line_internal_allocate(NULL, length + 1, length + 1);
-	if (!tmp->buffer)
+	if (!tmp || !tmp_buffer)
 	{
 		free(tmp);
+		free(tmp_buffer);
 		return (true);
 	}
+	tmp->buffer = tmp_buffer;
 	tmp->capacity = length;
 	tmp->length = length;
 	tmp->has_nl = buffer[length - 1] == '\n';
 	tmp->next = NULL;
-	i = -1;
-	while (++i < length)
-		tmp->buffer[i] = buffer[i];
+	tmp->buffer[length] = '\0';
+	while (length--)
+		tmp->buffer[length] = buffer[length];
 	if (context->tail)
 		context->tail->next = tmp;
 	else
