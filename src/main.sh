@@ -2,7 +2,7 @@
 
 set -e
 
-# make SANITIZER=address && \
+make SANITIZER=address BUFFER_SIZE=1024 && \
 clang \
 	-Wall -Wextra -Werror \
 	-fsanitize=address -g3 \

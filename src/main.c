@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 11:52:18 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/24 00:29:06 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/28 01:23:22 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <dlfcn.h>
 
 // /*
@@ -70,17 +71,21 @@ void	free(void *ptr)
 
 //*/
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	char	*str;
+	int		fd;
 
-	str = get_next_line(STDIN_FILENO);
+	fd = STDIN_FILENO;
+	if (argc > 1)
+		fd = open(argv[1], O_RDONLY);
+	str = get_next_line(fd);
 	while (str)
 	{
 		write(STDOUT_FILENO, "read:\t", 6);
 		write(STDOUT_FILENO, str, strlen(str));
 		free(str);
-		str = get_next_line(STDIN_FILENO);
+		str = get_next_line(fd);
 	}
 	return (0);
 }
