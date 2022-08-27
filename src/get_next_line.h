@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 21:36:47 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/24 23:43:49 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/27 09:50:56 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,11 @@ typedef union u_ft_get_line_trie_key
 }	t_ft_get_line_trie_key;
 
 typedef bool	t_err;
+
+void					*ft_get_line_internal_allocate(
+							void *original,
+							size_t size,
+							size_t copy);
 
 /**
  * @brief read buffer to get_line_context, get line from get_line_context

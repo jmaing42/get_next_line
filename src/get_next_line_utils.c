@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 03:00:27 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/25 21:28:04 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/27 09:57:45 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,26 @@
 
 #include <stdlib.h>
 
-static inline void	*ft_calloc(size_t count, size_t size)
+void	*ft_get_line_internal_allocate(
+	void *original,
+	size_t size,
+	size_t copy
+)
 {
-	const size_t	length = size * count;
-	void *const		result = malloc(length);
-	size_t			i;
+	void *const	result = malloc(size);
+	size_t		i;
 
-	if (!result)
-		return (NULL);
-	i = 0;
-	while (i < length)
-		((unsigned char *)result)[i++] = 0;
+	if (result)
+	{
+		i = -1;
+		if (original)
+			while (++i < copy)
+				((unsigned char *)result)[i] = ((unsigned char *)original)[i];
+		else
+			while (++i < copy)
+				((unsigned char *)result)[i] = 0;
+	}
+	free(original);
 	return (result);
 }
 
@@ -70,7 +79,9 @@ t_err	ft_get_line_trie_push(
 	bool							result;
 
 	if (!*node)
-		*node = ft_calloc(1, sizeof(t_ft_get_line_trie_node));
+		*node = ft_get_line_internal_allocate(NULL,
+				sizeof(t_ft_get_line_trie_node),
+				sizeof(t_ft_get_line_trie_node));
 	if (!*node)
 		return (true);
 	if (level == sizeof(int) - 1)
