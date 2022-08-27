@@ -43,7 +43,7 @@ int main(void)
 int    main(int argc, char **argv)
 {
     t_ft_get_line_context *const    context
-        = ft_get_line_init_context(YOUR_FD);
+        = ft_get_line_context(NULL, YOUR_FD); // initialize context
     char                            *line;
     size_t                          length;
 
@@ -56,7 +56,7 @@ int    main(int argc, char **argv)
         if (ft_get_line(&str, &length, context))
             return (EXIT_FAILURE);
     }
-    ft_get_line_free(context);
+    ft_get_line_context(context, -1); // destroy context
     return (EXIT_SUCCESS);
 }
 ```
