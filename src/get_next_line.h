@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 21:36:47 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/27 10:11:58 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/27 11:02:57 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,12 @@ typedef union u_ft_get_line_trie_key
 	unsigned char	index[sizeof(int)];
 }	t_ft_get_line_trie_key;
 
+typedef struct s_get_next_line_static
+{
+	t_ft_get_line_trie_node	*root;
+	char					buffer[BUFFER_SIZE];
+}	t_get_next_line_static;
+
 typedef bool	t_err;
 
 void					*ft_get_line_internal_allocate(
@@ -73,12 +79,14 @@ void					*ft_get_line_internal_allocate(
  *
  * @param out_line result, NULL on no more line
  * @param out_line_length length of result
- * @param context drain target
- * @return t_err true if failed
+ * @param context
+ * @return true on failure
+ * @return false on success
  */
 t_err					ft_get_line(
 							char **out_line,
 							size_t *out_line_length,
+							char *buffer,
 							t_ft_get_line_context *context);
 
 /**
@@ -99,10 +107,9 @@ t_ft_get_line_context	*ft_get_line_context(
  * @param out_line_length length of result
  * @param return_complete_line bring NULL on incomplete line if false
  * @param context drain target
- * @return t_err true if failed
  * @remarks this is internal function for ft_get_line
  */
-t_err					ft_get_line_drain(
+void					ft_get_line_drain(
 							char **out_line,
 							size_t *out_line_length,
 							bool return_complete_line,
@@ -118,11 +125,8 @@ t_err					ft_get_line_drain(
  * @remarks this is internal function for ft_get_line
  */
 t_err					ft_get_line_feed(
-							char *buffer,
+							const char *buffer,
 							size_t length,
-							t_ft_get_line_context *context);
-
-void					ft_get_line_free(
 							t_ft_get_line_context *context);
 
 /**
