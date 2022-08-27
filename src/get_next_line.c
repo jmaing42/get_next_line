@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/27 11:06:34 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/27 15:42:54 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,7 @@ t_err	ft_get_line(
 	{
 		bytes_read = read(context->fd, buffer, BUFFER_SIZE);
 		if (bytes_read < 0)
-		{
-			free(buffer);
 			return (true);
-		}
 		else if (bytes_read == 0)
 			context->eof = true;
 		if (ft_get_line_feed(buffer, bytes_read, context))
@@ -138,5 +135,24 @@ t_err	ft_get_line_feed(
 	t_ft_get_line_context *context
 )
 {
-	// TODO: implement
+	size_t	i;
+	size_t	offset;
+
+	offset = 0;
+	i = -1;
+	while (++i < length)
+	{
+		if (buffer[i] == '\n')
+		{
+			if (ft_get_line_feed_line(&buffer[offset], i + 1 - offset, context))
+				return (true);
+			offset = i + 1;
+		}
+	}
+	if (
+		offset != length
+		&& ft_get_line_feed_line(&buffer[offset], length - offset, context)
+	)
+		return (true);
+	return (false);
 }

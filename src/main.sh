@@ -2,7 +2,7 @@
 
 set -e
 
-make SANITIZER=address && \
+# make SANITIZER=address && \
 clang \
 	-Wall -Wextra -Werror \
 	-fsanitize=address -g3 \

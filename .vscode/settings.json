@@ -10,7 +10,7 @@
     "*.h": "c",
   },
   "clangd.detectExtensionConflicts": false,
-  "C_Cpp.autocomplete": "Disabled",
+  "C_Cpp.intelliSenseEngine": "Disabled",
   "C_Cpp.default.compileCommands": "${workspaceFolder}/compile_commands.json",
   "sonarlint.pathToCompileCommands": "${workspaceFolder}/compile_commands.json",
 }
