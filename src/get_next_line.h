@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 21:36:47 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/27 15:50:56 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/28 00:26:34 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ typedef union u_ft_get_line_trie_key
 typedef struct s_get_next_line_static
 {
 	t_ft_get_line_trie_node	*root;
+	t_ft_get_line_context	*last_context;
+	int						last_fd;
 	char					buffer[BUFFER_SIZE];
 }	t_get_next_line_static;
 

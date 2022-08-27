@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/28 00:51:13 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/28 01:09:29 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,21 @@ char	*get_next_line(int fd)
 	static t_get_next_line_static	gnl;
 	char							*result;
 	t_ft_get_line_context			*context;
+	const bool						reusing
+		= gnl.last_context && gnl.last_fd == fd;
 
-	if (!ft_get_line_trie_pop(&context, &gnl.root, fd, 0))
+	if (reusing)
+		context = gnl.last_context;
+	else if (!ft_get_line_trie_pop(&context, &gnl.root, fd, 0))
 		context = ft_get_line_context(NULL, fd);
 	if (!context)
 		return (NULL);
-	if (ft_get_line(&result, NULL, gnl.buffer, context))
+	gnl.last_fd = fd;
+	gnl.last_context = context;
+	if (ft_get_line(&result, NULL, gnl.buffer, context) || !result
+		|| (!reusing && ft_get_line_trie_push(context, &gnl.root, fd, 0)))
 	{
-		ft_get_line_context(context, -1);
-		return (NULL);
-	}
-	if (!result || ft_get_line_trie_push(context, &gnl.root, fd, 0))
-	{
+		ft_get_line_trie_pop(&context, &gnl.root, fd, 0);
 		ft_get_line_context(context, -1);
 		free(result);
 		return (NULL);
