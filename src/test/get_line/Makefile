@@ -25,4 +25,4 @@ main.exe: main.o ../../get_next_line.a
 
 .PHONY: ../../get_next_line.a
 ../../get_next_line.a:
-	$(MAKE) -C ../.. SANITIZE=address
+	$(MAKE) -C ../.. SANITIZE=address BUFFER_SIZE=4
