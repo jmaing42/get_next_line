@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/27 23:42:37 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/28 00:51:13 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,13 @@ char	*get_next_line(int fd)
 {
 	static t_get_next_line_static	gnl;
 	char							*result;
-	size_t							unused_result_length;
 	t_ft_get_line_context			*context;
 
 	if (!ft_get_line_trie_pop(&context, &gnl.root, fd, 0))
 		context = ft_get_line_context(NULL, fd);
 	if (!context)
 		return (NULL);
-	if (ft_get_line(&result, &unused_result_length, gnl.buffer, context))
+	if (ft_get_line(&result, NULL, gnl.buffer, context))
 	{
 		ft_get_line_context(context, -1);
 		return (NULL);
@@ -48,9 +47,10 @@ t_err	ft_get_line(
 )
 {
 	ssize_t	bytes_read;
+	size_t	line_length;
 
 	*out_line = NULL;
-	if (ft_get_line_drain(out_line, out_line_length, !context->eof, context))
+	if (ft_get_line_drain(out_line, &line_length, !context->eof, context))
 		return (true);
 	while (!*out_line && !context->eof)
 	{
@@ -62,10 +62,12 @@ t_err	ft_get_line(
 		if (
 			ft_get_line_feed(buffer, bytes_read, context)
 			|| ft_get_line_drain(
-				out_line, out_line_length, !context->eof, context)
+				out_line, &line_length, !context->eof, context)
 		)
 			return (true);
 	}
+	if (out_line_length)
+		*out_line_length = line_length;
 	return (false);
 }
 
