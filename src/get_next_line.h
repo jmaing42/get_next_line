@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 21:36:47 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/27 09:50:56 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/27 10:11:58 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,17 @@ char					*get_next_line(int fd);
 
 typedef struct s_ft_get_line_buffer_list_node
 {
-	struct s_ft_get_line_buffer_list_node	*prev;
 	struct s_ft_get_line_buffer_list_node	*next;
 	size_t									length;
+	size_t									capacity;
 	char									*buffer;
+	bool									has_nl;
 }	t_ft_get_line_buffer_list_node;
 
 typedef struct s_ft_get_line_context
 {
 	t_ft_get_line_buffer_list_node	*head;
 	t_ft_get_line_buffer_list_node	*tail;
-	size_t							offset;
-	size_t							length;
 	int								fd;
 	bool							eof;
 }	t_ft_get_line_context;
@@ -82,7 +81,15 @@ t_err					ft_get_line(
 							size_t *out_line_length,
 							t_ft_get_line_context *context);
 
-t_ft_get_line_context	*ft_get_line_init_context(
+/**
+ * @brief optionally free old, and optionally allocate new ft_get_line context
+ *
+ * @param old context free, if not NULL
+ * @param fd fd of new context, if not negative
+ * @return t_ft_get_line_context* NULL if fd is negative, new context otherwise
+ */
+t_ft_get_line_context	*ft_get_line_context(
+							t_ft_get_line_context *old,
 							int fd);
 
 /**
@@ -101,13 +108,8 @@ t_err					ft_get_line_drain(
 							bool return_complete_line,
 							t_ft_get_line_context *context);
 
-void					ft_get_line_drain_fill(
-							char *result,
-							size_t length,
-							t_ft_get_line_context *context);
-
 /**
- * @brief feed buffer to get_line_context, if ft_get_line_drain() brought NULL
+ * @brief feed buffer to get_line_context
  *
  * @param buffer buffer to feed (always consumed)
  * @param length buffer length to feed

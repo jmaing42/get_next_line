@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 03:00:27 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/27 09:57:45 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/27 10:09:53 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,50 +102,33 @@ t_err	ft_get_line_trie_push(
 	return (result);
 }
 
-void	ft_get_line_drain_fill(
-	char *result,
-	size_t length,
-	t_ft_get_line_context *context
+t_ft_get_line_context	*ft_get_line_context(
+	t_ft_get_line_context *old,
+	int fd
 )
 {
 	t_ft_get_line_buffer_list_node	*tmp;
-	size_t							i;
+	t_ft_get_line_context			*result;
 
-	context->length -= length;
-	result[length] = '\0';
-	i = 0;
-	while (i < length)
+	if (old)
 	{
-		result[i] = context->head->buffer[context->offset + i];
-		if (context->offset + ++i == context->head->length)
+		while (old->head)
 		{
-			length -= i;
-			result += i;
-			i = 0;
-			tmp = context->head;
-			context->head = context->head->next;
-			context->offset = 0;
-			if (!context->head)
-				context->tail = NULL;
+			tmp = old->head;
+			old->head = old->head->next;
 			free(tmp->buffer);
 			free(tmp);
 		}
+		free(old);
 	}
-	context->offset = i;
-}
-
-void	ft_get_line_free(
-	t_ft_get_line_context *context
-)
-{
-	t_ft_get_line_buffer_list_node	*tmp;
-
-	while (context->head)
-	{
-		tmp = context->head;
-		context->head = context->head->next;
-		free(tmp->buffer);
-		free(tmp);
-	}
-	free(context);
+	if (fd < 0)
+		return (NULL);
+	result = malloc(sizeof(t_ft_get_line_context));
+	if (!result)
+		return (NULL);
+	result->head = NULL;
+	result->tail = NULL;
+	result->fd = fd;
+	result->eof = false;
+	return (result);
 }
