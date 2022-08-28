@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 10:42:26 by jmaing            #+#    #+#             */
-/*   Updated: 2022/08/28 01:09:29 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/08/29 00:03:57 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char	*get_next_line(int fd)
 	if (ft_get_line(&result, NULL, gnl.buffer, context) || !result
 		|| (!reusing && ft_get_line_trie_push(context, &gnl.root, fd, 0)))
 	{
+		gnl.last_context = NULL;
 		ft_get_line_trie_pop(&context, &gnl.root, fd, 0);
 		ft_get_line_context(context, -1);
 		free(result);
