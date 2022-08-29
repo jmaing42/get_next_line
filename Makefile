@@ -23,6 +23,7 @@ reinit:
 refresh:
 	$Q$(MAKE) -C test refresh
 test: generate_bonus
+	$Q$(MAKE) -C src/test test
 	$Q$(MAKE) -C test test
 	@echo "Some test might need manual review"
 generate_bonus:
